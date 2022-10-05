@@ -1,6 +1,6 @@
-package by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity;
+package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.IStage;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.IStage;
 import lombok.Builder;
 
 import java.time.LocalTime;

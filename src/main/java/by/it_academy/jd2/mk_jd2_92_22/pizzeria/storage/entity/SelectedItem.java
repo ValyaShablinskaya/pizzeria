@@ -1,7 +1,7 @@
-package by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity;
+package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.IMenuRow;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.ISelectedItem;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.IMenuRow;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.ISelectedItem;
 import lombok.Builder;
 
 @Builder

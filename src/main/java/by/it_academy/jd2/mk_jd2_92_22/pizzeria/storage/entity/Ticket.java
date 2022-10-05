@@ -1,7 +1,7 @@
-package by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity;
+package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.IOrder;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.ITicket;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.IOrder;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.ITicket;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

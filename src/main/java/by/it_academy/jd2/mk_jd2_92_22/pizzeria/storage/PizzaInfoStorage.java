@@ -1,6 +1,6 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.PizzaInfo;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.api.IPizzaInfoStorage;
 
 import java.util.ArrayList;

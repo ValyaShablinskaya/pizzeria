@@ -1,6 +1,6 @@
-package by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity;
+package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.entity.api.*;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.*;
 import lombok.Builder;
 
 @Builder
