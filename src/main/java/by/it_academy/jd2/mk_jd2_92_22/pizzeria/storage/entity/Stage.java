@@ -1,14 +1,18 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.api.IStage;
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalTime;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Stage implements IStage {
-    private final String description;
-    private final LocalTime time;
+    private String description;
+    private LocalTime time;
 
     @Override
     public String getDescription() {
