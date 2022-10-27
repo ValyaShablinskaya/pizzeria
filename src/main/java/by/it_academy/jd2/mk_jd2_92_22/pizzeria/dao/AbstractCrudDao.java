@@ -109,6 +109,37 @@ public abstract class AbstractCrudDao<E> implements ICrudDao<E, Long> {
         }
     }
 
+    public void saveRelation(Long firstId, Long secondId, String saveRelationQuery) {
+        try (Connection connection = connector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(saveRelationQuery)) {
+            preparedStatement.setLong(1, firstId);
+            preparedStatement.setLong(2, secondId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataBaseRuntimeException("Relation insert failed", e);
+        }
+    }
+
+    protected List<E> findAllByLongParameter(Long parameter, String query) {
+        return findAllByParameter(parameter, query, LONG_CONSUMER);
+    }
+
+    private  <P> List<E> findAllByParameter(P parameter, String query, BiConsumer<PreparedStatement, P> consumer) {
+        try (Connection connection = connector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            List<E> entities = new ArrayList<>();
+            consumer.accept(preparedStatement, parameter);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    entities.add(mapResultSetToEntity(resultSet));
+                }
+                return entities;
+            }
+        } catch (SQLException e) {
+            throw new DataBaseRuntimeException(e);
+        }
+    }
+
     protected abstract void insert(PreparedStatement preparedStatement, E entity) throws SQLException;
     protected abstract E mapResultSetToEntity(ResultSet resultSet) throws SQLException;
     protected abstract void updateValues(PreparedStatement preparedStatement, E entity) throws SQLException;

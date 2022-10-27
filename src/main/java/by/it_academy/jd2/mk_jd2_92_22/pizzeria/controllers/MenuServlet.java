@@ -3,9 +3,11 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers.util.Converter;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuRowService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuService;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.MenuStorage;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.storage.entity.MenuRow;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -13,31 +15,68 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-//@WebServlet(name = "MenuServlet", urlPatterns = "/menu")
-//public class MenuServlet extends HttpServlet {
-//
-//    MenuStorage storage = new MenuStorage();
-//    MenuService service = new MenuService(storage);
-//    ObjectMapper mapper = new ObjectMapper();
-//    Converter converter = new Converter();
-//
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-//            throws ServletException, IOException {
-//        req.setCharacterEncoding("UTF-8");
-//        resp.setContentType("application/json");
-//        List<MenuRow> menuRows = service.findAll();
-//        PrintWriter writer = resp.getWriter();
-//        writer.write(mapper.writeValueAsString(menuRows));
-//    }
-//
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-//            throws ServletException, IOException {
-//
-//    }
-//}
+@WebServlet(name = "MenuServlet", urlPatterns = "/menu")
+public class MenuServlet extends HttpServlet {
+    private static final String BDPROPERTY = "/BDProperty.properties";
+    BDConnector bdConnector = new BDConnector(BDPROPERTY);
+    MenuDao menuDao = new MenuDao(bdConnector);
+    MenuRowDao menuRowDao = new MenuRowDao(bdConnector);
+    MenuRowService menuRowService = new MenuRowService(menuRowDao, menuDao);
+    MenuService service = new MenuService(menuDao);
+    ObjectMapper mapper = new ObjectMapper();
+    Converter converter = new Converter();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        PrintWriter writer = resp.getWriter();
+        String param = req.getParameter("id");
+        if (param == null) {
+            List<Menu> menuList = service.findAll();
+            writer.write(mapper.writeValueAsString(menuList));
+        } else {
+            Long id = Long.parseLong(param);
+            List<MenuRow> menuRows = menuRowService.findAllByIdMenu(id);
+            writer.write(mapper.writeValueAsString(menuRows));
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        BufferedReader bufferedReader = req.getReader();
+        String jsonToString = converter.convertToString(bufferedReader);
+        service.add(convertToMenu(jsonToString));
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        BufferedReader bufferedReader = req.getReader();
+        String jsonToString = converter.convertToString(bufferedReader);
+        service.update(convertToMenu(jsonToString));
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        Long id = Long.parseLong(req.getParameter("id"));
+        service.deleteById(id);
+    }
+
+    private Menu convertToMenu(String menuJson) {
+        Menu menu;
+        try {
+            menu = mapper.readValue(menuJson, Menu.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return menu;
+    }
+}

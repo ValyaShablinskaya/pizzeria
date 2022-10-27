@@ -11,4 +11,6 @@ public interface IMenuRowService {
     List<MenuRow> findAll();
     void update(Long id, MenuRow menuRow);
     void deleteById(Long id);
+    void  addRowToMenu(Long menuId, Long menuRowId);
+    List<MenuRow> findAllByIdMenu(Long id);
 }

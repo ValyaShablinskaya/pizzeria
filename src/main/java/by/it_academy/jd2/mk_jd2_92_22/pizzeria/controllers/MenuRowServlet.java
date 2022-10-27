@@ -5,7 +5,6 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuRowService;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -19,13 +18,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "MenuPositionServlet", urlPatterns = "/menu/positions")
-public class MenuPositionServlet extends HttpServlet {
+@WebServlet(name = "MenuRpwServlet", urlPatterns = "/menuRow")
+public class MenuRowServlet extends HttpServlet {
     private static final String BDPROPERTY = "/BDProperty.properties";
 
     BDConnector bdConnector = new BDConnector(BDPROPERTY);
     MenuRowDao dao = new MenuRowDao(bdConnector);
-    private final MenuRowService service = new MenuRowService(dao);
+    private final MenuRowService service = new MenuRowService(dao, new MenuDao(bdConnector));
     private final ObjectMapper mapper = new ObjectMapper();
     private final Converter converter = new Converter();
 

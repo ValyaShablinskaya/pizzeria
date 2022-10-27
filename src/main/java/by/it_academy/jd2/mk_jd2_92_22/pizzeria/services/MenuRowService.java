@@ -1,5 +1,6 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IMenuRowService;
@@ -10,9 +11,11 @@ import java.util.List;
 
 public class MenuRowService implements IMenuRowService {
     private final MenuRowDao menuRowDao;
+    private final MenuDao menuDao;
 
-    public MenuRowService(MenuRowDao menuRowDao) {
+    public MenuRowService(MenuRowDao menuRowDao, MenuDao menuDao) {
         this.menuRowDao = menuRowDao;
+        this.menuDao = menuDao;
     }
 
     @Override
@@ -45,5 +48,21 @@ public class MenuRowService implements IMenuRowService {
             throw new EntityNotFoundException("MenuRow is not found");
         }
        menuRowDao.deleteById(id);
+    }
+
+    @Override
+    public void addRowToMenu(Long menuId, Long menuRowId) {
+        if (!menuRowDao.findById(menuRowId).isPresent()) {
+            throw new EntityNotFoundException("Menu row is not found");
+        }
+        if (!menuDao.findById(menuId).isPresent()) {
+            throw new EntityNotFoundException("Menu is not found");
+        }
+        menuRowDao.addRowOnMenu(menuId, menuRowId);
+    }
+
+    @Override
+    public List<MenuRow> findAllByIdMenu(Long id) {
+        return menuRowDao.findAllRowsByIdMenu(id);
     }
 }

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+
 public class PizzaInfoDao extends AbstractCrudDao<PizzaInfo> implements IPizzaInfoDao {
     private static final String SAVE_QUERY =
             "INSERT INTO pizza_info(name, description, size, creation_date, update_date) VALUES (?, ?, ?, ?, ?)";

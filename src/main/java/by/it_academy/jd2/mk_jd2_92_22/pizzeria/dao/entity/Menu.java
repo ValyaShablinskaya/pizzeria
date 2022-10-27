@@ -15,13 +15,12 @@ import java.util.List;
 @Data
 public class Menu implements IMenu {
     private Long id;
-    private IMenuRow menuRow;
-    private List<IMenuRow> menuRows;
+    private List<MenuRow> menuRows;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
 
     @Override
-    public List<IMenuRow> getItems() {
+    public List<MenuRow> getItems() {
         return this.menuRows;
     }
 }
