@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "MenuServlet", urlPatterns = "/menu")
@@ -57,9 +58,11 @@ public class MenuServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        Long id = Long.parseLong(req.getParameter("id"));
+        LocalDateTime updateDate = menuDao.findById(id).get().getUpdateDate();
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-        service.update(convertToMenu(jsonToString));
+            service.update(convertToMenu(jsonToString), id, updateDate);
     }
 
     @Override
@@ -67,7 +70,8 @@ public class MenuServlet extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         Long id = Long.parseLong(req.getParameter("id"));
-        service.deleteById(id);
+        LocalDateTime updateDate = menuDao.findById(id).get().getUpdateDate();
+        service.deleteById(id, updateDate);
     }
 
     private Menu convertToMenu(String menuJson) {

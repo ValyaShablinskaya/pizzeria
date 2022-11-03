@@ -35,19 +35,26 @@ public class MenuRowService implements IMenuRowService {
     }
 
     @Override
-    public void update(Long id, MenuRow menuRow) {
-        MenuRow updateRow = menuRowDao.findById(id).orElseThrow(() -> new EntityNotFoundException("MenuRow is not found"));
-        updateRow.setPrice(menuRow.getPrice());
+    public void update(MenuRow menuRow, Long id, LocalDateTime updateDate) {
+        MenuRow updateRow = menuRowDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("MenuRow is not found"));
+        if (!updateRow.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("MenuRow has been already edited");
+        }
         updateRow.setUpdateDate(LocalDateTime.now());
+        updateRow.setPrice(menuRow.getPrice());
+        updateRow.setPizzaInfo(menuRow.getPizzaInfo());
         menuRowDao.update(updateRow);
     }
 
     @Override
-    public void deleteById(Long id) {
-        if (!menuRowDao.findById(id).isPresent()) {
-            throw new EntityNotFoundException("MenuRow is not found");
+    public void deleteById(Long id, LocalDateTime updateDate) {
+        MenuRow deleteRow = menuRowDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("MenuRow is not found"));
+        if (!deleteRow.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("MenuRow has been already edited");
         }
-       menuRowDao.deleteById(id);
+        menuRowDao.deleteById(id);
     }
 
     @Override

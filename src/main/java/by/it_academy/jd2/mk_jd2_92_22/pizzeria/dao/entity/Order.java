@@ -1,7 +1,8 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IMenu;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IOrder;
 import lombok.*;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,21 +13,16 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Data
-public class Menu implements IMenu {
+public class Order implements IOrder {
     private Long id;
-    private String name;
-    private List<MenuRow> menuRows;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
-    private boolean enabled;
+
+    private List<SelectedItem> selectedItems;
 
     @Override
-    public List<MenuRow> getItems() {
-        return this.menuRows;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
+    public List<SelectedItem> getSelected() {
+        return this.selectedItems;
     }
 }
+

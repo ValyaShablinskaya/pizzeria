@@ -49,18 +49,18 @@ public class MenuRowServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        Long id = Long.parseLong(req.getParameter("id"));
-        BufferedReader bufferedReader = req.getReader();
-        String jsonToString = converter.convertToString(bufferedReader);
-        service.update(id, convertToMenuRow(jsonToString));
+//        req.setCharacterEncoding("UTF-8");
+//        Long id = Long.parseLong(req.getParameter("id"));
+//        BufferedReader bufferedReader = req.getReader();
+//        String jsonToString = converter.convertToString(bufferedReader);
+//        service.update(id, convertToMenuRow(jsonToString));
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        Long id = Long.parseLong(req.getParameter("id"));
-        service.deleteById(id);
+//        req.setCharacterEncoding("UTF-8");
+//        Long id = Long.parseLong(req.getParameter("id"));
+//        service.deleteById(id);
     }
 
     private MenuRow convertToMenuRow(String menuRowJson) {

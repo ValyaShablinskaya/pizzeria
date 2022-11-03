@@ -1,6 +1,7 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaInfoDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IPizzaInfoService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityAlreadyExistException;
@@ -34,18 +35,26 @@ public class PizzaInfoService implements IPizzaInfoService {
     }
 
     @Override
-    public void update(PizzaInfo pizzaInfo) {
-        pizzaInfo.setUpdateDate(LocalDateTime.now());
-        if (!pizzaInfoDao.findById(pizzaInfo.getId()).isPresent()) {
-            throw new EntityNotFoundException("PizzaInfo is not found");
+    public void update(PizzaInfo pizzaInfo, Long id, LocalDateTime updateDate) {
+        PizzaInfo pizzaInfoToUpdate = pizzaInfoDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("PizzaInfo is not found"));
+        if (!pizzaInfoToUpdate.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("PizzaInfo has been already edited");
         }
-        pizzaInfoDao.update(pizzaInfo);
+        pizzaInfoToUpdate.setUpdateDate(LocalDateTime.now());
+        pizzaInfoToUpdate.setName(pizzaInfo.getName());
+        pizzaInfoToUpdate.setDescription(pizzaInfo.getDescription());
+        pizzaInfoToUpdate.setSize(pizzaInfo.getSize());
+
+        pizzaInfoDao.update(pizzaInfoToUpdate);
     }
 
     @Override
-    public void deleteById(Long id) {
-        if (!pizzaInfoDao.findById(id).isPresent()) {
-            throw new EntityNotFoundException("PizzaInfo is not found");
+    public void deleteById(Long id, LocalDateTime updateDate) {
+        PizzaInfo pizzaInfoToDelete = pizzaInfoDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("PizzaInfo is not found"));
+        if (!pizzaInfoToDelete.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("PizzaInfo has been already edited");
         }
         pizzaInfoDao.deleteById(id);
     }

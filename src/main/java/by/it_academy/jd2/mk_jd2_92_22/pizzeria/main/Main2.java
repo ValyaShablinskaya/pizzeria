@@ -79,6 +79,6 @@ public class Main2 {
 //                .id(2L)
 //                .creationDate(LocalDateTime.now())
 //                .build());
-        menuService.deleteById(5L);
+       // menuService.deleteById(5L);
    }
 }

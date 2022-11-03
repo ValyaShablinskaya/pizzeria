@@ -2,7 +2,6 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IMenuService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
@@ -34,18 +33,25 @@ public class MenuService implements IMenuService {
     }
 
     @Override
-    public void update(Menu menu) {
-        menu.setUpdateDate(LocalDateTime.now());
-        if (!menuDao.findById(menu.getId()).isPresent()) {
-            throw new EntityNotFoundException("Menu is not found");
+    public void update(Menu menu, Long id, LocalDateTime updateDate) {
+        Menu menuToUpdate = menuDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Menu is not found"));
+        if (!menuToUpdate.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("Menu has been already edited");
         }
-        menuDao.update(menu);
+        menuToUpdate.setUpdateDate(LocalDateTime.now());
+        menuToUpdate.setName(menu.getName());
+        menuToUpdate.setEnabled(menu.isEnabled());
+
+        menuDao.update(menuToUpdate);
     }
 
     @Override
-    public void deleteById(Long id) {
-        if (!menuDao.findById(id).isPresent()) {
-            throw new EntityNotFoundException("Menu is not found");
+    public void deleteById(Long id, LocalDateTime updateDate) {
+        Menu menuToDelete= menuDao.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Menu is not found"));
+        if (!menuToDelete.getUpdateDate().isEqual(updateDate)) {
+            throw new IllegalArgumentException("Menu has been already edited");
         }
         menuDao.deleteById(id);
     }

@@ -11,5 +11,6 @@ public interface IMenu {
      * @return пункты которые можно заказать
      */
     List<MenuRow> getItems();
+    boolean isEnabled();
 }
 
