@@ -24,17 +24,19 @@ import java.util.List;
 @WebServlet(name = "MenuServlet", urlPatterns = "/menu")
 public class MenuServlet extends HttpServlet {
     private static final String BDPROPERTY = "/BDProperty.properties";
-    BDConnector bdConnector = new BDConnector(BDPROPERTY);
-    MenuDao menuDao = new MenuDao(bdConnector);
-    MenuRowDao menuRowDao = new MenuRowDao(bdConnector);
-    MenuRowService menuRowService = new MenuRowService(menuRowDao, menuDao);
-    MenuService service = new MenuService(menuDao);
-    ObjectMapper mapper = new ObjectMapper();
-    Converter converter = new Converter();
+    private final BDConnector bdConnector = new BDConnector(BDPROPERTY);
+    private final MenuDao menuDao = new MenuDao(bdConnector);
+    private final MenuRowDao menuRowDao = new MenuRowDao(bdConnector);
+    private final MenuRowService menuRowService = new MenuRowService(menuRowDao, menuDao);
+    private final MenuService service = new MenuService(menuDao);
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final Converter converter = new Converter();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         PrintWriter writer = resp.getWriter();
         String param = req.getParameter("id");
         if (param == null) {
@@ -50,6 +52,8 @@ public class MenuServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
         service.add(convertToMenu(jsonToString));
@@ -58,19 +62,22 @@ public class MenuServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         Long id = Long.parseLong(req.getParameter("id"));
-        LocalDateTime updateDate = menuDao.findById(id).get().getUpdateDate();
+        LocalDateTime updateDate = service.findById(id).getUpdateDate();
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-            service.update(convertToMenu(jsonToString), id, updateDate);
+        service.update(convertToMenu(jsonToString), id, updateDate);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
         Long id = Long.parseLong(req.getParameter("id"));
-        LocalDateTime updateDate = menuDao.findById(id).get().getUpdateDate();
+        LocalDateTime updateDate = service.findById(id).getUpdateDate();
         service.deleteById(id, updateDate);
     }
 

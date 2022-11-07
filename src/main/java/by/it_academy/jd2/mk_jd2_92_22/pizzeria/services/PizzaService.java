@@ -2,7 +2,6 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Pizza;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.SelectedItem;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IPizzaService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
 

@@ -2,10 +2,14 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers.util.Converter;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaInfoDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.DoneOrderDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.DoneOrder;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaInfoService;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Pizza;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.DoneOrderService;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaService;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -19,12 +23,14 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet(name = "PizzaInformationServlet", urlPatterns = "/pizzaInformation")
-public class PizzaInformationServlet extends HttpServlet {
+@WebServlet(name = "DoneOrderServlet", urlPatterns = "/doneOrder")
+public class DoneOrderServlet extends HttpServlet {
     private static final String BDPROPERTY = "/BDProperty.properties";
     private final BDConnector bdConnector = new BDConnector(BDPROPERTY);
-    private final PizzaInfoDao dao = new PizzaInfoDao(bdConnector);
-    private final PizzaInfoService service = new PizzaInfoService(dao);
+    private final DoneOrderDao dao = new DoneOrderDao(bdConnector);
+    private final DoneOrderService service = new DoneOrderService(dao);
+    private final PizzaDao pizzaDao = new PizzaDao(bdConnector);
+    private final PizzaService pizzaService = new PizzaService(pizzaDao);
     private final ObjectMapper mapper = new ObjectMapper();
     private final Converter converter = new Converter();
 
@@ -36,12 +42,12 @@ public class PizzaInformationServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         String param = req.getParameter("id");
         if (param == null) {
-            List<PizzaInfo> pizzaInfoList = service.findAll();
-            writer.write(mapper.writeValueAsString(pizzaInfoList));
+            List<DoneOrder> doneOrders = service.findAll();
+            writer.write(mapper.writeValueAsString(doneOrders));
         } else {
             Long id = Long.parseLong(param);
-            PizzaInfo pizzaInfo = service.findById(id);
-            writer.write(mapper.writeValueAsString(pizzaInfo));
+            List<Pizza> pizzas = pizzaService.findAllByIdDoneOrder(id);
+            writer.write(mapper.writeValueAsString(pizzas));
         }
     }
 
@@ -52,7 +58,7 @@ public class PizzaInformationServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-        service.add(convertToPizzaInfo(jsonToString));
+        service.add(convertToDoneOrder(jsonToString));
     }
 
     @Override
@@ -64,7 +70,7 @@ public class PizzaInformationServlet extends HttpServlet {
         LocalDateTime updateDate = service.findById(id).getUpdateDate();
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-        service.update(convertToPizzaInfo(jsonToString), id, updateDate);
+        service.update(convertToDoneOrder(jsonToString), id, updateDate);
     }
 
     @Override
@@ -77,13 +83,13 @@ public class PizzaInformationServlet extends HttpServlet {
         service.deleteById(id, updateDate);
     }
 
-    private PizzaInfo convertToPizzaInfo(String pizzaInfoJson) {
-        PizzaInfo info;
+    private DoneOrder convertToDoneOrder(String doneOrderJson) {
+        DoneOrder doneOrder;
         try {
-            info = mapper.readValue(pizzaInfoJson, PizzaInfo.class);
+            doneOrder = mapper.readValue(doneOrderJson, DoneOrder.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return info;
+        return doneOrder;
     }
 }

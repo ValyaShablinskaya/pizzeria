@@ -2,10 +2,10 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers.util.Converter;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaInfoDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.StageDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaInfoService;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Stage;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.StageService;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -19,12 +19,12 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet(name = "PizzaInformationServlet", urlPatterns = "/pizzaInformation")
-public class PizzaInformationServlet extends HttpServlet {
+@WebServlet(name = "StageServlet", urlPatterns = "/stage")
+public class StageServlet extends HttpServlet {
     private static final String BDPROPERTY = "/BDProperty.properties";
     private final BDConnector bdConnector = new BDConnector(BDPROPERTY);
-    private final PizzaInfoDao dao = new PizzaInfoDao(bdConnector);
-    private final PizzaInfoService service = new PizzaInfoService(dao);
+    private final StageDao dao = new StageDao(bdConnector);
+    private final StageService service = new StageService(dao);
     private final ObjectMapper mapper = new ObjectMapper();
     private final Converter converter = new Converter();
 
@@ -36,12 +36,12 @@ public class PizzaInformationServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         String param = req.getParameter("id");
         if (param == null) {
-            List<PizzaInfo> pizzaInfoList = service.findAll();
-            writer.write(mapper.writeValueAsString(pizzaInfoList));
+            List<Stage> stageList = service.findAll();
+            writer.write(mapper.writeValueAsString(stageList));
         } else {
             Long id = Long.parseLong(param);
-            PizzaInfo pizzaInfo = service.findById(id);
-            writer.write(mapper.writeValueAsString(pizzaInfo));
+            Stage stage = service.findById(id);
+            writer.write(mapper.writeValueAsString(stage));
         }
     }
 
@@ -52,7 +52,7 @@ public class PizzaInformationServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-        service.add(convertToPizzaInfo(jsonToString));
+        service.add(convertToStage(jsonToString));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class PizzaInformationServlet extends HttpServlet {
         LocalDateTime updateDate = service.findById(id).getUpdateDate();
         BufferedReader bufferedReader = req.getReader();
         String jsonToString = converter.convertToString(bufferedReader);
-        service.update(convertToPizzaInfo(jsonToString), id, updateDate);
+        service.update(convertToStage(jsonToString), id, updateDate);
     }
 
     @Override
@@ -76,14 +76,13 @@ public class PizzaInformationServlet extends HttpServlet {
         LocalDateTime updateDate = service.findById(id).getUpdateDate();
         service.deleteById(id, updateDate);
     }
-
-    private PizzaInfo convertToPizzaInfo(String pizzaInfoJson) {
-        PizzaInfo info;
+    private Stage convertToStage(String stageJson) {
+        Stage stage;
         try {
-            info = mapper.readValue(pizzaInfoJson, PizzaInfo.class);
+            stage = mapper.readValue(stageJson, Stage.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return info;
+        return stage;
     }
 }
