@@ -1,29 +1,29 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IOrder;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.ITicket;
 import lombok.*;
 
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@Data
-public class Order implements IOrder {
+public class Ticket implements ITicket {
     private Long id;
+    private Order order;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
 
-    private List<SelectedItem> selectedItems;
+    @Override
+    public LocalDateTime getCreatAt() {
+        return this.creationDate;
+    }
 
     @Override
-    public List<SelectedItem> getSelected() {
-        return this.selectedItems;
+    public Order getOrder() {
+        return this.order;
     }
 }
-

@@ -1,24 +1,24 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 
-
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IPizzaInfo;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IPizza;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 @Data
-public class PizzaInfo implements IPizzaInfo {
+public class Pizza implements IPizza {
     private Long id;
     private String name;
-    private String description;
     private Long size;
+    private DoneOrder doneOrder;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
+
 
     @Override
     public String getName() {
@@ -26,17 +26,7 @@ public class PizzaInfo implements IPizzaInfo {
     }
 
     @Override
-    public String getDescription() {
-        return this.description;
-    }
-
-    @Override
     public Long getSize() {
         return this.size;
-    }
-
-    @Override
-    public Long getId() {
-        return this.id;
     }
 }

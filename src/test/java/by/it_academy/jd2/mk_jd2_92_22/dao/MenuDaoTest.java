@@ -2,8 +2,6 @@ package by.it_academy.jd2.mk_jd2_92_22.dao;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.*;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

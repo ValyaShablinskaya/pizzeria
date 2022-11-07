@@ -1,10 +1,8 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IOrder;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IDoneOrder;
 import lombok.*;
 
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,16 +12,20 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Data
-public class Order implements IOrder {
+public class DoneOrder implements IDoneOrder {
     private Long id;
+    private Ticket ticket;
+    private List<Pizza> pizzas;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
 
-    private List<SelectedItem> selectedItems;
+    @Override
+    public Ticket getTicket() {
+        return ticket;
+    }
 
     @Override
-    public List<SelectedItem> getSelected() {
-        return this.selectedItems;
+    public List<Pizza> getItems() {
+        return this.pizzas;
     }
 }
-

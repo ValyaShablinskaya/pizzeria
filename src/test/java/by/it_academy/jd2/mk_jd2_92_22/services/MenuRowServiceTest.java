@@ -90,7 +90,7 @@ class MenuRowServiceTest {
     }
 
     @Test
-    void findAllPizzaInfosShouldReturnCorrectResult() {
+    void findAllMenuRowsShouldReturnCorrectResult() {
         List<MenuRow> menuRows = new ArrayList<>();
 
         menuRows.add(MenuRow.builder()
@@ -109,7 +109,7 @@ class MenuRowServiceTest {
     }
 
     @Test
-    void updatePizzaInfoShouldReturnCorrectResult() {
+    void updateMenuRowShouldReturnCorrectResult() {
         LocalDateTime updateData =
                 LocalDateTime.of(2022, Month.SEPTEMBER, 22, 18, 32, 48, 24);
 
@@ -126,7 +126,7 @@ class MenuRowServiceTest {
     }
 
     @Test
-    void removePizzaInfoByIdShouldReturnCorrectResult() {
+    void removeMenuRowByIdShouldReturnCorrectResult() {
         LocalDateTime updateData =
                 LocalDateTime.of(2022, Month.SEPTEMBER, 22, 18, 32, 48, 24);
 

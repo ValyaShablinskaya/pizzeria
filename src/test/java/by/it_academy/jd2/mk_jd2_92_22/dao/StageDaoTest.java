@@ -1,9 +1,7 @@
 package by.it_academy.jd2.mk_jd2_92_22.dao;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.StageDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.TableCreator;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Stage;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.*;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +19,10 @@ class StageDaoTest {
     private BDConnector connector;
     private TableCreator tableCreator;
     private StageDao stageDao;
+    private OrderStatusDao orderStatusDao;
     private Stage stageOne;
+    private OrderDao orderDao;
+    private TicketDao ticketDao;
     private Stage stageTwo;
     private List<Stage> stages = new ArrayList<>();
 
@@ -30,6 +31,9 @@ class StageDaoTest {
         connector = new BDConnector(PROPERTIES);
         tableCreator = new TableCreator(connector);
         stageDao = new StageDao(connector);
+        orderStatusDao = new OrderStatusDao(connector);
+        orderDao = new OrderDao(connector);
+        ticketDao = new TicketDao(connector);
 
         createTestData();
     }
@@ -81,6 +85,19 @@ class StageDaoTest {
         assertThat(actual).isNull();
     }
 
+    @Test
+    void findAllStagesByOrderStatusIdShouldReturnListOfMenuRows() {
+        List<Stage> expected = new ArrayList<>();
+
+        expected.add(Stage.builder()
+                .id(1L)
+                .description("testy")
+                .build());
+
+        List <Stage> actual = stageDao.findAllStageByIdOrderStatus(1L);
+        assertEquals(expected, actual);
+    }
+
     private void createTestData() {
         tableCreator.runScript(SCRIPT_SQL);
 
@@ -94,9 +111,30 @@ class StageDaoTest {
                 .description("very testy")
                 .build();
 
+        Order order = Order.builder()
+                .id(1L)
+                .build();
+        orderDao.save(order);
+
+       Ticket ticket = Ticket.builder()
+                .id(1L)
+                .order(order)
+                .build();
+       ticketDao.save(ticket);
+
+        OrderStatus orderStatus = OrderStatus.builder()
+                .id(1L)
+                .ticket(ticket)
+                .isDone(true)
+                .build();
+
+        orderStatusDao.save(orderStatus);
+
         stageDao.save(stageOne);
         stageDao.save(stageTwo);
         stages.add(stageOne);
         stages.add(stageTwo);
+
+        stageDao.addStageOnOrderStatus(1L, 1L);
     }
 }

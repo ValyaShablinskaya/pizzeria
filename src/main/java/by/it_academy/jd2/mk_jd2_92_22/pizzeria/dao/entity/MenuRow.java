@@ -4,6 +4,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IMenuRow;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 @Data
 @Builder
