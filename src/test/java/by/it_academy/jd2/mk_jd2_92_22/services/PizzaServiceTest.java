@@ -49,7 +49,7 @@ public class PizzaServiceTest {
                 .doneOrder(doneOrder)
                 .build();
 
-        doNothing().when(pizzaDao).save(pizza);
+        when(pizzaDao.save(pizza)).thenReturn(Optional.of(pizza));
 
         pizzaService.add(pizza);
         verify(pizzaDao).save(pizza);
@@ -160,7 +160,7 @@ public class PizzaServiceTest {
                 .build();
 
         when(pizzaDao.findById(pizza.getId())).thenReturn(Optional.of(pizza));
-        doNothing().when(pizzaDao).update(pizza);
+        when(pizzaDao.update(pizza)).thenReturn(Optional.of(pizza));
         pizzaService.update(pizza, pizza.getId(), updateData);
         verify(pizzaDao).update(pizza);
     }

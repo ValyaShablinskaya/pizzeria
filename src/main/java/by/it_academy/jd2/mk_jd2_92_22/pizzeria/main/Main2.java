@@ -17,17 +17,17 @@ import java.time.LocalDateTime;
 
 public class Main2 {
     public static void main(String[] args) {
-        String BDPROPERTY = "/BDProperty.properties";
-
-        BDConnector bdConnector = new BDConnector(BDPROPERTY);
-        MenuRowDao dao = new MenuRowDao(bdConnector);
-        MenuRowService service = new MenuRowService(dao, new MenuDao(bdConnector));
-        PizzaInfoDao pizzaInfoDao = new PizzaInfoDao(bdConnector);
-        PizzaInfoService pizzaInfoService = new PizzaInfoService(pizzaInfoDao);
-        MenuDao menuDao = new MenuDao(bdConnector);
-        MenuService menuService = new MenuService(menuDao);
-        ObjectMapper mapper = new ObjectMapper();
-        Converter converter = new Converter();
+//        String BDPROPERTY = "/BDProperty.properties";
+//
+//        BDConnector bdConnector = new BDConnector(BDPROPERTY);
+//        MenuRowDao dao = new MenuRowDao(bdConnector);
+//        MenuRowService service = new MenuRowService(dao, new MenuDao(bdConnector));
+//        PizzaInfoDao pizzaInfoDao = new PizzaInfoDao(bdConnector);
+//        PizzaInfoService pizzaInfoService = new PizzaInfoService(pizzaInfoDao);
+//        MenuDao menuDao = new MenuDao(bdConnector);
+//        MenuService menuService = new MenuService(menuDao);
+//        ObjectMapper mapper = new ObjectMapper();
+//        Converter converter = new Converter();
 
 //        service.add(MenuRow.builder()
 //                .pizzaInfo(pizzaInfoService.findById(3L))

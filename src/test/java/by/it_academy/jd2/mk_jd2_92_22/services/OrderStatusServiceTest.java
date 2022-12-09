@@ -43,8 +43,7 @@ public class OrderStatusServiceTest {
                 .isDone(true)
                 .build();
 
-        doNothing().when(orderStatusDao).save(orderStatus);
-
+        when(orderStatusDao.save(orderStatus)).thenReturn(Optional.of(orderStatus));
         orderStatusService.add(orderStatus);
         verify(orderStatusDao).save(orderStatus);
     }
@@ -134,7 +133,7 @@ public class OrderStatusServiceTest {
                 .build();
 
         when(orderStatusDao.findById(orderStatus.getId())).thenReturn(Optional.of(orderStatus));
-        doNothing().when(orderStatusDao).update(orderStatus);
+        when(orderStatusDao.update(orderStatus)).thenReturn(Optional.of(orderStatus));
         orderStatusService.update(orderStatus, orderStatus.getId(), updateData);
         verify(orderStatusDao).update(orderStatus);
     }

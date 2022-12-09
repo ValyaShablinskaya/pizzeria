@@ -3,6 +3,7 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.IMenuDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class MenuDao extends AbstractCrudDao<Menu> implements IMenuDao {
             "UPDATE menu SET creation_date = ?, update_date = ?, name = ?, enabled = ? WHERE id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM menu WHERE id = ?";
 
-    public MenuDao(BDConnector connector) {
+    public MenuDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY,
                 DELETE_BY_ID_QUERY);
     }

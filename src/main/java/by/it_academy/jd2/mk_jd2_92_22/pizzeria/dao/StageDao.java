@@ -4,6 +4,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.IStageDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Stage;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +29,7 @@ public class StageDao extends AbstractCrudDao<Stage> implements IStageDao {
     private static final String CREATE_CATALOG_ROWS =
             "INSERT INTO stage_order_status(stage_id, order_status_id) VALUES (?, ?)";
 
-    public StageDao(BDConnector connector) {
+    public StageDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

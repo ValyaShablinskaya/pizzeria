@@ -6,6 +6,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Order;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.OrderStatus;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Ticket;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class DoneOrderDao extends AbstractCrudDao<DoneOrder> implements IDoneOrd
             "UPDATE done_order SET ticket_id = ?, creation_date = ?, update_date = ? WHERE id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM done_order WHERE id = ?";
 
-    public DoneOrderDao(BDConnector connector) {
+    public DoneOrderDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

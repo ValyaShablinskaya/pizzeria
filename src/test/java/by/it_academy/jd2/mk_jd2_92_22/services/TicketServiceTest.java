@@ -37,8 +37,7 @@ public class TicketServiceTest {
                 .order(order)
                 .build();
 
-        doNothing().when(ticketDao).save(ticket);
-
+        when(ticketDao.save(ticket)).thenReturn(Optional.of(ticket));
         ticketService.add(ticket);
         verify(ticketDao).save(ticket);
     }
@@ -116,7 +115,7 @@ public class TicketServiceTest {
                 .build();
 
         when(ticketDao.findById(ticket.getId())).thenReturn(Optional.of(ticket));
-        doNothing().when(ticketDao).update(ticket);
+        when(ticketDao.update(ticket)).thenReturn(Optional.of(ticket));
         ticketService.update(ticket, ticket.getId(), updateData);
         verify(ticketDao).update(ticket);
     }

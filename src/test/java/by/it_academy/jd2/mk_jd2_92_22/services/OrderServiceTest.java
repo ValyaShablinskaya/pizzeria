@@ -33,8 +33,7 @@ public class OrderServiceTest {
                 .id(3L)
                 .build();
 
-        doNothing().when(orderDao).save(order);
-
+        when(orderDao.save(order)).thenReturn(Optional.of(order));
         orderService.add(order);
         verify(orderDao).save(order);
     }
@@ -89,7 +88,7 @@ public class OrderServiceTest {
                 .build();
 
         when(orderDao.findById(order.getId())).thenReturn(Optional.of(order));
-        doNothing().when(orderDao).update(order);
+        when(orderDao.update(order)).thenReturn(Optional.of(order));
         orderService.update(order, order.getId(), updateData);
         verify(orderDao).update(order);
     }

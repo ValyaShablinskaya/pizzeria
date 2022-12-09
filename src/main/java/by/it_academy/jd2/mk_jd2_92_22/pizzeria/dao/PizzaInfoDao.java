@@ -3,6 +3,7 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.IPizzaInfoDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class PizzaInfoDao extends AbstractCrudDao<PizzaInfo> implements IPizzaIn
             "UPDATE pizza_info SET name = ?, description = ?, size = ?, creation_date = ?, update_date = ? WHERE id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM pizza_info WHERE id = ?";
 
-    public PizzaInfoDao(BDConnector connector) {
+    public PizzaInfoDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

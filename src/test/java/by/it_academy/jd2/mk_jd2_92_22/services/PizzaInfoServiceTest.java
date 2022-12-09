@@ -36,8 +36,7 @@ class PizzaInfoServiceTest {
                 .size(16L)
                 .build();
 
-        doNothing().when(pizzaInfoDao).save(pizzaInfo);
-
+        when(pizzaInfoDao.save(pizzaInfo)).thenReturn(Optional.of(pizzaInfo));
         pizzaInfoService.add(pizzaInfo);
         verify(pizzaInfoDao).save(pizzaInfo);
     }
@@ -107,7 +106,7 @@ class PizzaInfoServiceTest {
                 .build();
 
         when(pizzaInfoDao.findById(pizzaInfo.getId())).thenReturn(Optional.of(pizzaInfo));
-        doNothing().when(pizzaInfoDao).update(pizzaInfo);
+        when(pizzaInfoDao.update(pizzaInfo)).thenReturn(Optional.of(pizzaInfo));
         pizzaInfoService.update(pizzaInfo, pizzaInfo.getId(), updateData);
         verify(pizzaInfoDao).update(pizzaInfo);
     }

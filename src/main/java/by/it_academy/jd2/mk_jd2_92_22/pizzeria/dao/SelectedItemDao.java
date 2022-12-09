@@ -6,6 +6,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Order;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.SelectedItem;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +38,7 @@ public class SelectedItemDao extends AbstractCrudDao<SelectedItem> implements IS
             "LEFT JOIN pizza_info ON menu_row.pizza_info_id = pizza_info.id " +
             "WHERE orders.id = ?";
 
-    public SelectedItemDao(BDConnector connector) {
+    public SelectedItemDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

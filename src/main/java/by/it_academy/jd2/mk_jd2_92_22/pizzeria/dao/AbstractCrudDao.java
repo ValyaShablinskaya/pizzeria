@@ -3,24 +3,22 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.ICrudDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.exception.DataBaseRuntimeException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public abstract class AbstractCrudDao<E> implements ICrudDao<E, Long> {
-    protected final BDConnector connector;
+    protected final DataSource connector;
     private final String saveQuery;
     private final String findByIdQuery;
     private final String findAllQuery;
     private final String updateQuery;
     private final String deleteByIdQuery;
 
-    public AbstractCrudDao(BDConnector connector, String saveQuery, String findByIdQuery, String findAllQuery,
+    public AbstractCrudDao(DataSource connector, String saveQuery, String findByIdQuery, String findAllQuery,
                            String updateQuery, String deleteByIdQuery) {
         this.connector = connector;
         this.saveQuery = saveQuery;
@@ -47,12 +45,18 @@ public abstract class AbstractCrudDao<E> implements ICrudDao<E, Long> {
                     throw new DataBaseRuntimeException(e);
                 }
             };
+
     @Override
-    public void save(E entity) {
+    public Optional<E> save(E entity) {
         try (Connection connection = connector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(saveQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(saveQuery, Statement.RETURN_GENERATED_KEYS)) {
             insert(preparedStatement, entity);
-           preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                resultSet.next();
+                Long newId = resultSet.getLong(1);
+                return findById(newId);
+            }
         } catch (SQLException e) {
             throw new DataBaseRuntimeException("Insertion is failed", e);
         }
@@ -88,11 +92,16 @@ public abstract class AbstractCrudDao<E> implements ICrudDao<E, Long> {
     }
 
     @Override
-    public void update(E entity) {
+    public Optional<E> update(E entity) {
         try (Connection connection = connector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(updateQuery, Statement.RETURN_GENERATED_KEYS)) {
             updateValues(preparedStatement, entity);
             preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                resultSet.next();
+                Long newId = resultSet.getLong(1);
+                return findById(newId);
+            }
         } catch (SQLException e) {
             throw new DataBaseRuntimeException("Update is failed!", e);
         }

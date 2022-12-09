@@ -6,6 +6,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Order;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Pizza;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Ticket;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,7 +37,7 @@ public class PizzaDao extends AbstractCrudDao<Pizza> implements IPizzaDao {
             "LEFT JOIN orders ON ticket.orders_id = orders.id " +
             "WHERE done_order.id = ?";
 
-    public PizzaDao(BDConnector connector) {
+    public PizzaDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

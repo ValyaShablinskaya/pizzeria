@@ -4,6 +4,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.ITicketDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Order;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Ticket;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class TicketDao extends AbstractCrudDao<Ticket> implements ITicketDao {
             "UPDATE ticket SET orders_id = ?, creation_date = ?, update_date = ? WHERE id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM ticket WHERE id = ?";
 
-    public TicketDao(BDConnector connector) {
+    public TicketDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

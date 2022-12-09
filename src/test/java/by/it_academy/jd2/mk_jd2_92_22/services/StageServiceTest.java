@@ -1,7 +1,6 @@
 package by.it_academy.jd2.mk_jd2_92_22.services;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.StageDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Stage;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.StageService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
@@ -34,8 +33,7 @@ public class StageServiceTest {
                 .description("testy")
                 .build();
 
-        doNothing().when(stageDao).save(stage);
-
+        when(stageDao.save(stage)).thenReturn(Optional.of(stage));
         stageService.add(stage);
         verify(stageDao).save(stage);
     }
@@ -96,7 +94,7 @@ public class StageServiceTest {
                 .build();
 
         when(stageDao.findById(stage.getId())).thenReturn(Optional.of(stage));
-        doNothing().when(stageDao).update(stage);
+        when(stageDao.update(stage)).thenReturn(Optional.of(stage));
         stageService.update(stage, stage.getId(), updateData);
         verify(stageDao).update(stage);
     }

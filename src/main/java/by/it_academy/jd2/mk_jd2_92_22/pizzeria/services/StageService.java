@@ -3,7 +3,9 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.OrderStatusDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.StageDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Stage;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.mappers.IStageMapper;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IStageService;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.dto.StageDTO;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.util.List;
 public class StageService implements IStageService {
     private final StageDao stageDao;
     private final OrderStatusDao orderStatusDao;
+    private static final String ENTITY_NOT_FOUND_EXCEPTION = "Stage is not found";
 
     public StageService(StageDao stageDao, OrderStatusDao orderStatusDao) {
         this.stageDao = stageDao;
@@ -19,38 +22,43 @@ public class StageService implements IStageService {
     }
 
     @Override
-    public void add(Stage stage) {
+    public StageDTO add(StageDTO stageDTO) {
+        Stage stage = IStageMapper.INSTANCE.convertToStage(stageDTO);
         stage.setCreationDate(LocalDateTime.now());
-        stageDao.save(stage);
+        stage.setUpdateDate(stage.getCreationDate());
+        stage = stageDao.save(stage).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
+        return IStageMapper.INSTANCE.convertToStageDTO(stage);
     }
 
     @Override
-    public Stage findById(Long id) {
-        return stageDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Stage is not found"));
+    public StageDTO findById(Long id) {
+        Stage stage = stageDao.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
+        return IStageMapper.INSTANCE.convertToStageDTO(stage);
     }
 
     @Override
-    public List<Stage> findAll() {
-        return stageDao.findAll();
+    public List<StageDTO> findAll() {
+        List<Stage> stages = stageDao.findAll();
+        return IStageMapper.INSTANCE.convertToStageList(stages);
     }
 
     @Override
-    public void update(Stage stage, Long id, LocalDateTime updateDate) {
+    public StageDTO update(StageDTO stageDTO, Long id, LocalDateTime updateDate) {
         Stage stageToUpdate = stageDao.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Stage is not found"));
+                () -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
         if (!stageToUpdate.getUpdateDate().isEqual(updateDate)) {
             throw new IllegalArgumentException("Stage has been already edited");
         }
         stageToUpdate.setUpdateDate(LocalDateTime.now());
-        stageToUpdate.setDescription(stage.getDescription());
-
-        stageDao.update(stageToUpdate);
+        stageToUpdate.setDescription(stageDTO.getDescription());
+        stageToUpdate = stageDao.update(stageToUpdate).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
+        return IStageMapper.INSTANCE.convertToStageDTO(stageToUpdate);
     }
 
     @Override
     public void deleteById(Long id, LocalDateTime updateDate) {
         Stage stageToDelete = stageDao.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Stage is not found"));
+                () -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
         if (!stageToDelete.getUpdateDate().isEqual(updateDate)) {
             throw new IllegalArgumentException("Stage has been already edited");
         }
@@ -60,7 +68,7 @@ public class StageService implements IStageService {
     @Override
     public void addStageOnOrderStatus(Long stageId, Long orderStatusId) {
         if (!stageDao.findById(stageId).isPresent()) {
-            throw new EntityNotFoundException("Stage is not found");
+            throw new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION);
         }
         if (!orderStatusDao.findById(orderStatusId).isPresent()) {
             throw new EntityNotFoundException("Order status is not found");
@@ -69,7 +77,8 @@ public class StageService implements IStageService {
     }
 
     @Override
-    public List<Stage> findAllByIdOrderStatus(Long id) {
-        return stageDao.findAllStageByIdOrderStatus(id);
+    public List<StageDTO> findAllByIdOrderStatus(Long id) {
+        List<Stage> stages = stageDao.findAllStageByIdOrderStatus(id);
+        return IStageMapper.INSTANCE.convertToStageList(stages);
     }
 }

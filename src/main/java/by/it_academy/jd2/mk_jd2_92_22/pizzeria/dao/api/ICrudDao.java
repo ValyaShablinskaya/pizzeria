@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ICrudDao<E, ID> {
-    void save(E entity);
+    Optional<E> save(E entity);
 
     Optional<E> findById(ID id);
 
     List<E> findAll();
 
-    void update(E entity);
+    Optional<E> update(E entity);
 
     void deleteById(ID id);
 }

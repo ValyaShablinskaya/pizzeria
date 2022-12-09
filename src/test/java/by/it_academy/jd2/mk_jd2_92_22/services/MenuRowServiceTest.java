@@ -43,7 +43,7 @@ class MenuRowServiceTest {
                 .pizzaInfo(pizzaInfo)
                 .build();
 
-        doNothing().when(menuRowDao).save(menuRow);
+        when(menuRowDao.save(menuRow)).thenReturn(Optional.of(menuRow));
 
         menuRowService.add(menuRow);
         verify(menuRowDao).save(menuRow);
@@ -120,7 +120,7 @@ class MenuRowServiceTest {
                 .build();
 
         when(menuRowDao.findById(menuRow.getId())).thenReturn(Optional.of(menuRow));
-        doNothing().when(menuRowDao).update(menuRow);
+        when(menuRowDao.update(menuRow)).thenReturn(Optional.of(menuRow));
         menuRowService.update(menuRow, menuRow.getId(), updateData);
         verify(menuRowDao).update(menuRow);
     }

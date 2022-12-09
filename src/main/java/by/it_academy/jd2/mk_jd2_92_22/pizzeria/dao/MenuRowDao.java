@@ -4,6 +4,7 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.IMenuRowDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class MenuRowDao extends AbstractCrudDao<MenuRow> implements IMenuRowDao 
     private static final String CREATE_CATALOG_ROWS =
             "INSERT INTO menu_menu_row(menu_id, menu_row_id) VALUES (?, ?)";
 
-    public MenuRowDao(BDConnector connector) {
+    public MenuRowDao(DataSource connector) {
         super(connector, SAVE_QUERY, FIND_BY_ID_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY);
     }
 

@@ -55,8 +55,7 @@ public class SelectedItemServiceTest {
                 .count(6L)
                 .build();
 
-        doNothing().when(selectedItemDao).save(selectedItem);
-
+        when(selectedItemDao.save(selectedItem)).thenReturn(Optional.of(selectedItem));
         selectedItemService.add(selectedItem);
         verify(selectedItemDao).save(selectedItem);
     }
@@ -173,7 +172,7 @@ public class SelectedItemServiceTest {
                 .build();
 
         when(selectedItemDao.findById(selectedItem.getId())).thenReturn(Optional.of(selectedItem));
-        doNothing().when(selectedItemDao).update(selectedItem);
+        when(selectedItemDao.update(selectedItem)).thenReturn(Optional.of(selectedItem));
         selectedItemService.update(selectedItem, selectedItem.getId(), updateData);
         verify(selectedItemDao).update(selectedItem);
     }
