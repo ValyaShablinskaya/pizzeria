@@ -22,17 +22,17 @@ public class OrderServlet {
 
     @GetMapping("/{id}")
     protected ResponseEntity<OrderDTO> get(@PathVariable long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.read(id));
     }
 
     @GetMapping
     protected ResponseEntity<List<OrderDTO>> getList() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.get());
     }
 
     @PostMapping
     protected ResponseEntity<OrderDTO> doPost(@RequestBody OrderDTO data) {
-        OrderDTO created = this.service.add(data);
+        OrderDTO created = this.service.create(data);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -54,6 +54,6 @@ public class OrderServlet {
                 Instant.ofEpochMilli(updateDateRaw),
                 ZoneId.of("UTC")
         );
-        service.deleteById(id, updateDate);
+        service.delete(id, updateDate);
     }
 }

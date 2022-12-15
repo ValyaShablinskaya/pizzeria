@@ -22,17 +22,17 @@ public class SelectedItemServlet {
 
     @GetMapping("/{id}")
     protected ResponseEntity<SelectedItemDTO> get(@PathVariable long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.read(id));
     }
 
     @GetMapping
     protected ResponseEntity<List<SelectedItemDTO>> getList() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.get());
     }
 
     @PostMapping
     protected ResponseEntity<SelectedItemDTO> doPost(@RequestBody SelectedItemDTO data) {
-        SelectedItemDTO created = this.service.add(data);
+        SelectedItemDTO created = this.service.create(data);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -54,6 +54,6 @@ public class SelectedItemServlet {
                 Instant.ofEpochMilli(updateDateRaw),
                 ZoneId.of("UTC")
         );
-        service.deleteById(id, updateDate);
+        service.delete(id, updateDate);
     }
 }

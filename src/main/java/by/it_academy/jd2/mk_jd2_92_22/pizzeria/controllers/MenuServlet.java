@@ -23,17 +23,17 @@ public class MenuServlet {
 
    @GetMapping("/{id}")
     protected ResponseEntity<MenuDTO> get(@PathVariable long id) {
-       return ResponseEntity.ok(service.findById(id));
+       return ResponseEntity.ok(service.read(id));
     }
 
     @GetMapping
     protected ResponseEntity<List<MenuDTO>> getList() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.get());
     }
 
     @PostMapping
     protected ResponseEntity<MenuDTO> doPost(@RequestBody MenuDTO data) {
-        MenuDTO created = this.service.add(data);
+        MenuDTO created = this.service.create(data);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -55,6 +55,6 @@ public class MenuServlet {
                 Instant.ofEpochMilli(updateDateRaw),
                 ZoneId.of("UTC")
         );
-        service.deleteById(id, updateDate);
+        service.delete(id, updateDate);
     }
 }

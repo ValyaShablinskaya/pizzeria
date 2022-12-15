@@ -1,70 +1,41 @@
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xsi:schemaLocation=" http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa" xsi:schemaLocation=" http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx https://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
     <mvc:annotation-driven/>
+    <tx:annotation-driven/>
+    <jpa:repositories base-package="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao" entity-manager-factory-ref="myEmf"/>
     <context:component-scan base-package="by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers"/>
 
     <bean name="pizzaInfoService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaInfoService" >
-        <constructor-arg name="pizzaInfoDao" ref="pizzaInfoDao" />
+        <constructor-arg name="dao" ref="IPizzaInfoDao" />
     </bean>
     <bean name="doneOrderService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.DoneOrderService" >
-        <constructor-arg name="doneOrderDao" ref="doneOrderDao" />
+        <constructor-arg name="doneOrderDao" ref="IDoneOrderDao" />
     </bean>
     <bean name="menuRowService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuRowService" >
-        <constructor-arg name="menuRowDao" ref="menuRowDao" />
-        <constructor-arg name="menuDao" ref="menuDao" />
+        <constructor-arg name="menuRowDao" ref="IMenuRowDao" />
+        <constructor-arg name="menuDao" ref="IMenuDao" />
     </bean>
     <bean name="menuService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuService" >
-        <constructor-arg name="menuDao" ref="menuDao" />
+        <constructor-arg name="menuDao" ref="IMenuDao" />
     </bean>
     <bean name="OrderService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.OrderService" >
-        <constructor-arg name="orderDao" ref="orderDao" />
+        <constructor-arg name="orderDao" ref="IOrderDao" />
     </bean>
     <bean name="orderStatusService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.OrderStatusService" >
-        <constructor-arg name="orderStatusDao" ref="orderStatusDao" />
+        <constructor-arg name="orderStatusDao" ref="IOrderStatusDao" />
     </bean>
     <bean name="pizzaService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaService" >
-        <constructor-arg name="pizzaDao" ref="pizzaDao" />
+        <constructor-arg name="pizzaDao" ref="IPizzaDao" />
     </bean>
     <bean name="selectedItemService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.SelectedItemService" >
-        <constructor-arg name="selectedItemDao" ref="selectedItemDao" />
-        <constructor-arg name="orderDao" ref="orderDao" />
+        <constructor-arg name="selectedItemDao" ref="ISelectedItemDao" />
+        <constructor-arg name="orderDao" ref="IOrderDao" />
     </bean>
     <bean name="stageService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.StageService" >
-        <constructor-arg name="stageDao" ref="stageDao" />
-        <constructor-arg name="orderStatusDao" ref="orderStatusDao" />
+        <constructor-arg name="stageDao" ref="IStageDao" />
+        <constructor-arg name="orderStatusDao" ref="IOrderStatusDao" />
     </bean>
     <bean name="ticketService" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.TicketService" >
-        <constructor-arg name="ticketDao" ref="ticketDao" />
-    </bean>
-
-    <bean id="menuDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="pizzaInfoDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaInfoDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="doneOrderDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.DoneOrderDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="menuRowDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="orderDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.OrderDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="orderStatusDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.OrderStatusDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="pizzaDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="selectedItemDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.SelectedItemDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="stageDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.StageDao" >
-        <constructor-arg name="connector" ref="dataSource" />
-    </bean>
-    <bean id="ticketDao" class="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.TicketDao" >
-        <constructor-arg name="connector" ref="dataSource" />
+        <constructor-arg name="ticketDao" ref="ITicketDao" />
     </bean>
 
 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -77,6 +48,29 @@
     <property name="acquireIncrement" value="5" />
     <property name="maxPoolSize" value="20" />
     <property name="maxStatements" value="180" />
-
 </bean>
+
+    <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">none</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</prop>
+                <prop key="hibernate.default_schema"></prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="myEmf"/>
+    </bean>
+    <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" p:autoDetectFields="false" p:autoDetectGettersSetters="false"> </bean>
+        </property>
+    </bean>
 </beans>

@@ -1,6 +1,6 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.services;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.OrderStatusDao;
+import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api.IOrderStatusDao;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.OrderStatus;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Ticket;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.mappers.IOrderStatusMapper;
@@ -8,40 +8,43 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.mappers.ITicketMapper;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IOrderStatusService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.dto.OrderStatusDTO;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Transactional(readOnly = true)
 public class OrderStatusService implements IOrderStatusService {
-    private final OrderStatusDao orderStatusDao;
+    private final IOrderStatusDao orderStatusDao;
     private static final String ENTITY_NOT_FOUND_EXCEPTION = "OrderStatus is not found";
 
-    public OrderStatusService(OrderStatusDao orderStatusDao) {
+    public OrderStatusService(IOrderStatusDao orderStatusDao) {
         this.orderStatusDao = orderStatusDao;
     }
 
     @Override
-    public OrderStatusDTO add(OrderStatusDTO orderStatusDTO) {
+    @Transactional(readOnly = true)
+    public OrderStatusDTO create(OrderStatusDTO orderStatusDTO) {
         OrderStatus orderStatus = IOrderStatusMapper.INSTANCE.convertToOrderStatus(orderStatusDTO);
        orderStatus.setCreationDate(LocalDateTime.now());
        orderStatus.setUpdateDate(orderStatus.getCreationDate());
-       orderStatus = orderStatusDao.save(orderStatus).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
+       orderStatus = orderStatusDao.save(orderStatus);
        return IOrderStatusMapper.INSTANCE.convertToOrderStatusDTO(orderStatus);
     }
 
     @Override
-    public OrderStatusDTO findById(Long id) {
+    public OrderStatusDTO read(Long id) {
         OrderStatus orderStatus = orderStatusDao.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
         return IOrderStatusMapper.INSTANCE.convertToOrderStatusDTO(orderStatus);
     }
 
     @Override
-    public List<OrderStatusDTO> findAll() {
+    public List<OrderStatusDTO> get() {
         List<OrderStatus> orderStatuses = orderStatusDao.findAll();
         return IOrderStatusMapper.INSTANCE.convertToOrderStatusList(orderStatuses);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderStatusDTO update(OrderStatusDTO orderStatusDTO, Long id, LocalDateTime updateDate) {
         OrderStatus updateOrderStatus = orderStatusDao.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
@@ -52,12 +55,13 @@ public class OrderStatusService implements IOrderStatusService {
         Ticket ticket = ITicketMapper.INSTANCE.convertToTicket(orderStatusDTO.getTicket());
         updateOrderStatus.setTicket(ticket);
         updateOrderStatus.setDone(orderStatusDTO.isDone());
-        updateOrderStatus = orderStatusDao.update(updateOrderStatus).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
+        updateOrderStatus = orderStatusDao.save(updateOrderStatus);
         return IOrderStatusMapper.INSTANCE.convertToOrderStatusDTO(updateOrderStatus);
     }
 
     @Override
-    public void deleteById(Long id, LocalDateTime updateDate) {
+    @Transactional(readOnly = true)
+    public void delete(Long id, LocalDateTime updateDate) {
         OrderStatus deleteOrderStatus = orderStatusDao.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
         if (!deleteOrderStatus.getUpdateDate().isEqual(updateDate)) {

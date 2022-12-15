@@ -3,20 +3,34 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IMenu;
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
-@Data
+@Builder
+@Entity
+@Table(name = "menu")
 public class Menu implements IMenu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private List<MenuRow> menuRows;
+    @ManyToMany
+    @JoinTable(name = "menu_menu_row",
+            joinColumns = {@JoinColumn(name = "menu_id")},
+            inverseJoinColumns = {@JoinColumn(name = "menu_row_id")}
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<MenuRow> menuRows = new ArrayList<>();
+    @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    @Version
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
     private boolean enabled;
 

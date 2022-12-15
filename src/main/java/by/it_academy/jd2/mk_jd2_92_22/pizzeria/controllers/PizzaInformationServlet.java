@@ -22,17 +22,17 @@ public class PizzaInformationServlet {
 
     @GetMapping("/{id}")
     protected ResponseEntity<PizzaInfoDTO> get(@PathVariable long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.read(id));
     }
 
     @GetMapping
     protected ResponseEntity<List<PizzaInfoDTO>> getList() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.get());
     }
 
     @PostMapping
     protected ResponseEntity<PizzaInfoDTO> doPost(@RequestBody PizzaInfoDTO data) {
-        PizzaInfoDTO created = this.service.add(data);
+        PizzaInfoDTO created = this.service.create(data);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -54,6 +54,6 @@ public class PizzaInformationServlet {
                 Instant.ofEpochMilli(updateDateRaw),
                 ZoneId.of("UTC")
         );
-        service.deleteById(id, updateDate);
+        service.delete(id, updateDate);
     }
 }

@@ -4,20 +4,25 @@ package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.api.IPizzaInfo;
 import lombok.*;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
-@Data
+@Builder
+@Entity
+@Table(name = "pizza_info")
 public class PizzaInfo implements IPizzaInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
     private Long size;
+    @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    @Version
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @Override

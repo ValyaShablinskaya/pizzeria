@@ -1,6 +1,7 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.api;
 
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IOrderDao extends ICrudDao<Order, Long> {
+public interface IOrderDao extends JpaRepository<Order, Long> {
 }

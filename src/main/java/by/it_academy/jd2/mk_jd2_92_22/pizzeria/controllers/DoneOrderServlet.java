@@ -22,17 +22,17 @@ public class DoneOrderServlet {
 
     @GetMapping("/{id}")
     protected ResponseEntity<DoneOrderDTO> get(@PathVariable long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(service.read(id));
     }
 
     @GetMapping
     protected ResponseEntity<List<DoneOrderDTO>> getList() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.get());
     }
 
     @PostMapping
     protected ResponseEntity<DoneOrderDTO> doPost(@RequestBody DoneOrderDTO data) {
-        DoneOrderDTO created = this.service.add(data);
+        DoneOrderDTO created = this.service.create(data);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
@@ -54,6 +54,6 @@ public class DoneOrderServlet {
                 Instant.ofEpochMilli(updateDateRaw),
                 ZoneId.of("UTC")
         );
-        service.deleteById(id, updateDate);
+        service.delete(id, updateDate);
     }
 }

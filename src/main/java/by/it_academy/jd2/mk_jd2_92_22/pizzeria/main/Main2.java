@@ -1,20 +1,5 @@
 package by.it_academy.jd2.mk_jd2_92_22.pizzeria.main;
 
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.controllers.util.Converter;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.BDConnector;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.MenuRowDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.PizzaInfoDao;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.Menu;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.MenuRow;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.dao.entity.PizzaInfo;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuRowService;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.MenuService;
-import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.PizzaInfoService;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import java.time.LocalDateTime;
-
 public class Main2 {
     public static void main(String[] args) {
 //        String BDPROPERTY = "/BDProperty.properties";
