@@ -8,4 +8,5 @@ import lombok.Data;
 public class MenuRowDTO {
     private PizzaInfoDTO pizzaInfo;
     private Double price;
+    private MenuDTO menu;
 }

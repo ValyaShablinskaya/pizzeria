@@ -8,39 +8,46 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.mappers.IPizzaMapper;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.IPizzaService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.dto.PizzaDTO;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+@Service
 @Transactional(readOnly = true)
 public class PizzaService implements IPizzaService {
     private final IPizzaDao pizzaDao;
+    private final IPizzaMapper pizzaMapper;
+    private final IDoneOrderMapper doneOrderMapper;
     private static final String ENTITY_NOT_FOUND_EXCEPTION = "Pizza is not found";
 
-    public PizzaService(IPizzaDao pizzaDao) {
+    public PizzaService(IPizzaDao pizzaDao, IPizzaMapper pizzaMapper, IDoneOrderMapper doneOrderMapper) {
         this.pizzaDao = pizzaDao;
+        this.pizzaMapper = pizzaMapper;
+        this.doneOrderMapper = doneOrderMapper;
     }
 
     @Override
     @Transactional
     public PizzaDTO create(PizzaDTO pizzaDTO) {
-        Pizza pizza = IPizzaMapper.INSTANCE.convertToPizza(pizzaDTO);
+        Pizza pizza = pizzaMapper.convertToPizza(pizzaDTO);
         pizza.setCreationDate(LocalDateTime.now());
         pizza.setUpdateDate(pizza.getCreationDate());
         pizza = pizzaDao.save(pizza);
-        return IPizzaMapper.INSTANCE.convertToPizzaDTO(pizza);
+        return pizzaMapper.convertToPizzaDTO(pizza);
     }
 
     @Override
     public PizzaDTO read(Long id) {
         Pizza pizza = pizzaDao.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
-        return IPizzaMapper.INSTANCE.convertToPizzaDTO(pizza);
+        return pizzaMapper.convertToPizzaDTO(pizza);
     }
 
     @Override
     public List<PizzaDTO> get() {
         List<Pizza> pizzas = pizzaDao.findAll();
-        return IPizzaMapper.INSTANCE.convertToPizzaList(pizzas);
+        return pizzaMapper.convertToPizzaList(pizzas);
     }
 
     @Override
@@ -54,10 +61,10 @@ public class PizzaService implements IPizzaService {
         updatePizza.setUpdateDate(LocalDateTime.now());
         updatePizza.setName(pizzaDTO.getName());
         updatePizza.setSize(pizzaDTO.getSize());
-        DoneOrder doneOrder = IDoneOrderMapper.INSTANCE.convertToDoneOrder(pizzaDTO.getDoneOrder());
+        DoneOrder doneOrder = doneOrderMapper.convertToDoneOrder(pizzaDTO.getDoneOrder());
         updatePizza.setDoneOrder(doneOrder);
         updatePizza = pizzaDao.save(updatePizza);
-        return IPizzaMapper.INSTANCE.convertToPizzaDTO(updatePizza);
+        return pizzaMapper.convertToPizzaDTO(updatePizza);
     }
 
     @Override
@@ -70,10 +77,4 @@ public class PizzaService implements IPizzaService {
         }
         pizzaDao.deleteById(id);
     }
-
-//    @Override
-//    public List<PizzaDTO> findAllByIdDoneOrder(Long id) {
-//        List<Pizza> pizzas = pizzaDao.findAllPizzasByIdDoneOrder(id);
-//        return IPizzaMapper.INSTANCE.convertToPizzaList(pizzas);
-//    }
 }

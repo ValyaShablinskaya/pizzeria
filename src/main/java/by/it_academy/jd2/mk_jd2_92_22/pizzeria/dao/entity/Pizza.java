@@ -20,15 +20,12 @@ public class Pizza implements IPizza {
     private Long size;
     @ManyToOne
     @JoinColumn(name = "done_order_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private DoneOrder doneOrder;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
     @Version
     @Column(name = "update_date")
     private LocalDateTime updateDate;
-
 
     @Override
     public String getName() {

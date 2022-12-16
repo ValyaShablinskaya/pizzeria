@@ -27,11 +27,7 @@ public class OrderStatus implements IOrderStatus {
     @Version
     @Column(name = "update_date")
     private LocalDateTime updateDate;
-    @ManyToMany
-    @JoinTable(name = "stage_order_status",
-            joinColumns = {@JoinColumn(name = "order_status_id")},
-            inverseJoinColumns = {@JoinColumn(name = "stage_id")}
-    )
+    @OneToMany
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Stage> history = new ArrayList<>();

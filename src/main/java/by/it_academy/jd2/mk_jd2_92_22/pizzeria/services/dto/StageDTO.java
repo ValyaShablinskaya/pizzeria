@@ -7,4 +7,5 @@ import lombok.Data;
 @Data
 public class StageDTO {
     private String description;
+    private OrderStatusDTO orderStatus;
 }

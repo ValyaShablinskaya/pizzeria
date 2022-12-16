@@ -19,11 +19,7 @@ public class Menu implements IMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @ManyToMany
-    @JoinTable(name = "menu_menu_row",
-            joinColumns = {@JoinColumn(name = "menu_id")},
-            inverseJoinColumns = {@JoinColumn(name = "menu_row_id")}
-    )
+    @OneToMany
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<MenuRow> menuRows = new ArrayList<>();

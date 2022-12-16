@@ -11,41 +11,52 @@ import by.it_academy.jd2.mk_jd2_92_22.pizzeria.mappers.ISelectedItemMapper;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.api.ISelectedItemService;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.dto.SelectedItemDTO;
 import by.it_academy.jd2.mk_jd2_92_22.pizzeria.services.exception.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+@Service
 @Transactional(readOnly = true)
 public class SelectedItemService implements ISelectedItemService {
     private final ISelectedItemDao selectedItemDao;
     private final IOrderDao orderDao;
+    private final ISelectedItemMapper selectedItemMapper;
+    private final IMenuRowMapper menuRowMapper;
+    private final IOrderMapper orderMapper;
     private static final String ENTITY_NOT_FOUND_EXCEPTION = "SelectedItem is not found";
 
-    public SelectedItemService(ISelectedItemDao selectedItemDao, IOrderDao orderDao) {
+    public SelectedItemService(ISelectedItemDao selectedItemDao, IOrderDao orderDao,
+                               ISelectedItemMapper selectedItemMapper, IMenuRowMapper menuRowMapper,
+                               IOrderMapper orderMapper) {
         this.selectedItemDao = selectedItemDao;
         this.orderDao = orderDao;
+        this.selectedItemMapper = selectedItemMapper;
+        this.menuRowMapper = menuRowMapper;
+        this.orderMapper = orderMapper;
     }
 
     @Override
     @Transactional
     public SelectedItemDTO create(SelectedItemDTO selectedItemDTO) {
-        SelectedItem selectedItem = ISelectedItemMapper.INSTANCE.convertToSelectedItem(selectedItemDTO);
+        SelectedItem selectedItem = selectedItemMapper.convertToSelectedItem(selectedItemDTO);
         selectedItem.setCreationDate(LocalDateTime.now());
         selectedItem.setUpdateDate(selectedItem.getCreationDate());
         selectedItem = selectedItemDao.save(selectedItem);
-        return ISelectedItemMapper.INSTANCE.convertToSelectedItemDTO(selectedItem);
+        return selectedItemMapper.convertToSelectedItemDTO(selectedItem);
     }
 
     @Override
     public SelectedItemDTO read(Long id) {
         SelectedItem selectedItem = selectedItemDao.findById(id).orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_EXCEPTION));
-        return ISelectedItemMapper.INSTANCE.convertToSelectedItemDTO(selectedItem);
+        return selectedItemMapper.convertToSelectedItemDTO(selectedItem);
     }
 
     @Override
     public List<SelectedItemDTO> get() {
         List<SelectedItem> selectedItems = selectedItemDao.findAll();
-        return ISelectedItemMapper.INSTANCE.convertToSelectedItemList(selectedItems);
+        return selectedItemMapper.convertToSelectedItemList(selectedItems);
     }
 
     @Override
@@ -57,12 +68,12 @@ public class SelectedItemService implements ISelectedItemService {
         }
         updateSelectedItem.setUpdateDate(LocalDateTime.now());
         updateSelectedItem.setCount(selectedItemDTO.getCount());
-        MenuRow menuRow = IMenuRowMapper.INSTANCE.convertToMenuRow(selectedItemDTO.getMenuRow());
+        MenuRow menuRow = menuRowMapper.convertToMenuRow(selectedItemDTO.getMenuRow());
         updateSelectedItem.setMenuRow(menuRow);
-        Order order = IOrderMapper.INSTANCE.convertToOrder(selectedItemDTO.getOrder());
+        Order order = orderMapper.convertToOrder(selectedItemDTO.getOrder());
         updateSelectedItem.setOrder(order);
         updateSelectedItem = selectedItemDao.save(updateSelectedItem);
-        return ISelectedItemMapper.INSTANCE.convertToSelectedItemDTO(updateSelectedItem);
+        return selectedItemMapper.convertToSelectedItemDTO(updateSelectedItem);
     }
 
     @Override
@@ -74,10 +85,4 @@ public class SelectedItemService implements ISelectedItemService {
         }
         selectedItemDao.deleteById(id);
     }
-
-//    @Override
-//    public List<SelectedItemDTO> findAllByIdOrder(Long id) {
-//        List<SelectedItem> selectedItems = selectedItemDao.findAllSelectedItemByIdOrder(id);
-//        return ISelectedItemMapper.INSTANCE.convertToSelectedItemList(selectedItems);
-//    }
 }

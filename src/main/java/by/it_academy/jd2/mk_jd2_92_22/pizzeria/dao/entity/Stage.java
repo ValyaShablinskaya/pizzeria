@@ -21,14 +21,11 @@ public class Stage implements IStage {
     private Long id;
     private String description;
     private LocalTime time;
-    @ManyToMany
-    @JoinTable(name = "stage_order_status",
-            joinColumns = {@JoinColumn(name = "stage_id")},
-            inverseJoinColumns = {@JoinColumn(name = "order_status_id")}
-    )
+    @ManyToOne
+    @JoinColumn(name = "order_status_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<OrderStatus> orderStatuses = new ArrayList<>();
+    private OrderStatus orderStatus;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
     @Version
